@@ -9,6 +9,16 @@ This Android application runs Arm-optimized image models locally on an Arm64 pho
 
 The application imports model binaries at run time, so the model files are not stored in the Android application package (APK).
 
+## Application views
+
+<p align="center">
+  <img src="docs/images/photo-insight-startup.png" width="30%" alt="Photo Insight start screen before a model or photo has been selected">
+  <img src="docs/images/photo-insight-quick-identify.png" width="30%" alt="Quick Identify classifying a dog with MobileNetV3 Small and LiteRT">
+  <img src="docs/images/photo-insight-custom-match.png" width="30%" alt="Custom Match comparing a dog photo with candidate descriptions using CLIP and ExecuTorch">
+</p>
+
+The application supports fixed-label classification in **Quick Identify** and custom image-text matching in **Custom Match**.
+
 ## Requirements
 
 - Android Studio with Android SDK 35
