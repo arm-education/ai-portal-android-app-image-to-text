@@ -1,6 +1,8 @@
 .gradle/
 .idea/
 local.properties
+models/
+.hf-venv/
 **/build/
 *.iml
 !app/src/main/AndroidManifest.xml

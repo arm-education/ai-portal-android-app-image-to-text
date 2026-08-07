@@ -80,7 +80,6 @@ public class MainActivity extends Activity {
         selectedTask = activeState == null
                 ? ModelTask.FIXED_LABEL_CLASSIFICATION
                 : activeState.task();
-        loadInitialImage();
         applyModeState();
         if (activeState != null) {
             results.setText(selectedTask == ModelTask.DESCRIPTION_MATCHING
@@ -182,17 +181,6 @@ public class MainActivity extends Activity {
             updateControls(false);
         } catch (IOException exception) {
             showError(getString(R.string.image_open_failed, exception.getMessage()));
-        }
-    }
-
-    private void loadInitialImage() {
-        try (InputStream input = getAssets().open("sample_input.jpg")) {
-            Bitmap bitmap = BitmapFactory.decodeStream(input);
-            if (bitmap != null) {
-                replaceSelectedBitmap(bitmap);
-            }
-        } catch (IOException exception) {
-            results.setText(R.string.choose_image_to_begin);
         }
     }
 

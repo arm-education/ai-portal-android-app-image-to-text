@@ -10,7 +10,7 @@ final class ModelRegistry {
                     "DEiT Tiny",
                     ModelTask.FIXED_LABEL_CLASSIFICATION,
                     ModelDescriptor.ModelRuntime.LITERT,
-                    "facebook__deit-tiny-patch16-224_litert_optimized.tflite",
+                    "deit-tiny-int8-litert.tflite",
                     LiteRtClassifier.PreprocessingProfile.IMAGENET_CROP_256
             ),
             new ModelDescriptor(
@@ -18,7 +18,7 @@ final class ModelRegistry {
                     "Google ViT",
                     ModelTask.FIXED_LABEL_CLASSIFICATION,
                     ModelDescriptor.ModelRuntime.LITERT,
-                    "google__vit-base-patch16-224_android_litert_optimized.tflite",
+                    "vit-base-int8-litert.tflite",
                     LiteRtClassifier.PreprocessingProfile.SYMMETRIC_DIRECT_RESIZE
             ),
             new ModelDescriptor(
@@ -26,7 +26,7 @@ final class ModelRegistry {
                     "MobileNetV3 Small",
                     ModelTask.FIXED_LABEL_CLASSIFICATION,
                     ModelDescriptor.ModelRuntime.LITERT,
-                    "mobilenet_v3_small_android_litert_optimized.tflite",
+                    "mobilenet-v3-small-int8-litert.tflite",
                     LiteRtClassifier.PreprocessingProfile.IMAGENET_CROP_256
             ),
             new ModelDescriptor(
@@ -34,7 +34,7 @@ final class ModelRegistry {
                     "Swin Tiny",
                     ModelTask.FIXED_LABEL_CLASSIFICATION,
                     ModelDescriptor.ModelRuntime.LITERT,
-                    "microsoft__swin-tiny-patch4-window7-224_android_litert_optimized.tflite",
+                    "swin-tiny-int8-litert.tflite",
                     LiteRtClassifier.PreprocessingProfile.IMAGENET_CROP_256
             ),
             new ModelDescriptor(
@@ -42,7 +42,7 @@ final class ModelRegistry {
                     "timm ViT",
                     ModelTask.FIXED_LABEL_CLASSIFICATION,
                     ModelDescriptor.ModelRuntime.LITERT,
-                    "timm__vit_base_patch16_224.augreg_in21k_ft_in1k_android_litert_optimized.tflite",
+                    "vit-base-timm-int8-litert.tflite",
                     LiteRtClassifier.PreprocessingProfile.SYMMETRIC_CROP_232
             ),
             new ModelDescriptor(
@@ -50,7 +50,7 @@ final class ModelRegistry {
                     "CLIP ViT-B/32 INT8",
                     ModelTask.DESCRIPTION_MATCHING,
                     ModelDescriptor.ModelRuntime.EXECUTORCH,
-                    "optimized.pte",
+                    "clip-vit-base-patch32-int8-executorch.pte",
                     null
             )
     );
