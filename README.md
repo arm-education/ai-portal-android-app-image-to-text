@@ -1,12 +1,11 @@
-# Android App - Image Classification
-## This is an example learning app that uses image classification models from the Arm AI Portal.
+# Photo Insight Android application
 
-This application is provided in relation to the following learning path: https://learn.arm.com/learning-paths/mobile-graphics-and-gaming/ai-portal-mobile-image-classification. It is intended for learning purposes only, to understand how models can be executed on devices, not as a reference production-quality app. It is provided under the [Arm Education End User License Agreement](LICENSE.md).
+This example application accompanies the [Arm Learning Path for running image classification models from the Arm AI Portal](https://learn.arm.com/learning-paths/mobile-graphics-and-gaming/ai-portal-mobile-image-classification). It is intended for learning how models run on devices and is not a reference production application. It is provided under the [Arm Education End User License Agreement](LICENSE.md).
 
-This Android application runs Arm-optimized image models locally on an Arm64 phone or emulator. It provides two launch workflows:
+This Android application runs Arm-optimized image models locally on an Arm64 phone or emulator. It provides two workflows:
 
 - **Quick Identify** runs a fixed-label ImageNet classifier with LiteRT and XNNPACK. Several different models can be used for this mode.
-- **Custom Match** runs a CLIP Vision Encoder model with ExecuTorch and XNNPACK and compares a photo with descriptions entered by the user.
+- **Custom Match** runs a CLIP model with ExecuTorch and XNNPACK and compares a photo with descriptions entered by the user.
 
 The application imports model binaries at run time, so the model files are not stored in the Android application package (APK).
 
@@ -16,8 +15,6 @@ The application imports model binaries at run time, so the model files are not s
 - Java 17, supplied by Android Studio
 - An Arm64 Android device running Android 9, API 28, or later
 - One supported model file downloaded from the Arm AI Portal
-
-The Gradle build includes only the `arm64-v8a` application binary interface (ABI).
 
 ## Supported launch models
 
@@ -84,8 +81,6 @@ Copy the downloaded model to the Android **Downloads** directory through ADB:
 adb push "$MODEL_FILE" /sdcard/Download/
 ```
 
-If more than one Android target is connected, use `adb -s <DEVICE_SERIAL> push ...`.
-
 ## Open and run the application
 
 1. Clone or download this repository.
@@ -99,58 +94,6 @@ If more than one Android target is connected, use `adb -s <DEVICE_SERIAL> push .
 The application does not include a sample photo. Each user selects the image they want to analyze from the Android document picker.
 
 The application stores the selected model in its private files directory. Clearing application data or uninstalling the application removes imported models.
-
-## Application architecture
-
-`ModelRegistry.java` contains the launch model descriptors. Each descriptor records:
-
-- The expected filename and display name.
-- The user-facing task.
-- The LiteRT or ExecuTorch runtime.
-- The LiteRT preprocessing profile, when applicable.
-
-`ModelImporter.java` resolves the descriptor, copies the file into private storage, and asks `ModelRunnerRegistry.java` to validate the registered runtime adapter before activating the model.
-
-`ModelRunnerRegistry.java` provides two launch runner factories:
-
-- `LiteRtClassifier` for fixed-label classification.
-- `ClipModel` and `ClipTokenizer` for CLIP description matching.
-
-The user interface works with the shared `ModelRunner` interface and does not construct runtime-specific model loaders directly.
-
-## LiteRT preprocessing profiles
-
-| Profile | Resize and crop | Normalization | Current models |
-| --- | --- | --- | --- |
-| `IMAGENET_CROP_256` | Resize the shorter edge to 256, then center-crop to the model input size | ImageNet mean and standard deviation | DEiT Tiny, MobileNetV3 Small, Swin Tiny |
-| `SYMMETRIC_DIRECT_RESIZE` | Resize directly to the model input size | Mean `0.5` and standard deviation `0.5` for every RGB channel | Google ViT |
-| `SYMMETRIC_CROP_232` | Resize the shorter edge to 232, then center-crop to the model input size | Mean `0.5` and standard deviation `0.5` for every RGB channel | timm ViT |
-
-Another classifier can reuse a profile only when its resize, crop, layout, input type, normalization, output, and label order match.
-
-## Arm CPU acceleration
-
-The LiteRT path enables XNNPACK, and the CLIP program uses the ExecuTorch XNNPACK backend. The Arm64 native libraries in LiteRT `2.1.6` and ExecuTorch `1.3.1` contain SME2 code paths. LiteRT `2.1.6` also packages KleidiAI.
-
-On an SME2-capable phone, XNNPACK can select a compatible KleidiAI SME2 kernel automatically for individual operations. Other operations use another compatible XNNPACK path.
-
-## Build from the command line
-
-Set `ANDROID_HOME` to your Android SDK and `JAVA_HOME` to a Java 17 or later installation.
-
-On macOS or Linux, run:
-
-```bash
-./gradlew assembleDebug lint
-```
-
-On Windows PowerShell, run:
-
-```powershell
-.\gradlew.bat assembleDebug lint
-```
-
-The debug APK is written under `app/build/outputs/apk/debug/`.
 
 ## License
 
