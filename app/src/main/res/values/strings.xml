@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Photo Insight</string>
+    <string name="hero_eyebrow">ON-DEVICE AI</string>
+    <string name="screen_title">What did you capture?</string>
+    <string name="screen_description">Choose a photo and let your Arm-based mobile identify what is in it.</string>
+    <string name="choose_mode">Choose how to identify it</string>
+    <string name="quick_mode_title">Quick Identify</string>
+    <string name="quick_mode_description">Match known categories</string>
+    <string name="custom_mode_title">Custom Match</string>
+    <string name="custom_mode_description">Compare with labels you choose</string>
+    <string name="your_photo">Your photo</string>
+    <string name="selected_image">Photo selected for identification</string>
+    <string name="choose_photo">Choose a photo</string>
+    <string name="model_card_title">AI model</string>
+    <string name="model_not_imported">Model setup needed</string>
+    <string name="quick_model_missing">Add a LiteRT classifier to use Quick Identify.</string>
+    <string name="custom_model_missing">Add the CLIP ExecuTorch model to use Custom Match.</string>
+    <string name="quick_model_ready">Uses a standard classifier with a fixed set of categories.</string>
+    <string name="custom_model_ready">Uses CLIP zero-shot matching with descriptions you provide.</string>
+    <string name="import_quick_model">Add classifier model</string>
+    <string name="import_custom_model">Add CLIP model</string>
+    <string name="candidate_descriptions">What might be in the photo?</string>
+    <string name="candidate_helper">Add two or more possibilities, separated by commas.</string>
+    <string name="candidate_hint">dog, cat, bicycle, car</string>
+    <string name="candidate_defaults">cat, dog, bicycle, car, tree, building</string>
+    <string name="identify_photo">Identify photo</string>
+    <string name="compare_photo">Compare possibilities</string>
+    <string name="results_title">Photo analysis</string>
+    <string name="initial_instructions">Choose a mode, add its model, and select a photo to begin.</string>
+    <string name="clip_ready">Custom Match is ready. Adjust the possibilities or analyze the photo.</string>
+    <string name="litert_ready">Quick Identify is ready. Analyze the sample or choose another photo.</string>
+    <string name="image_ready">Photo ready. Run the active identification mode.</string>
+    <string name="choose_image_to_begin">Choose a photo to begin.</string>
+    <string name="importing_model">Setting up the model…</string>
+    <string name="running_clip">Comparing your photo with each possibility…</string>
+    <string name="running_litert">Identifying your photo…</string>
+    <string name="model_import_failed">Model setup failed: %1$s</string>
+    <string name="image_open_failed">Unable to open photo: %1$s</string>
+    <string name="inference_failed">Analysis failed: %1$s</string>
+    <string name="import_before_running">Add a model for this mode before analyzing the photo.</string>
+    <string name="choose_before_running">Choose a photo before running analysis.</string>
+</resources>
