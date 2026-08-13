@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_card"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/candidate_descriptions"
+        android:textColor="@color/ink"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/candidate_helper"
+        android:textColor="@color/ink_soft"
+        android:textSize="13sp" />
+
+    <EditText
+        android:id="@+id/candidate_labels"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_input"
+        android:gravity="top|start"
+        android:hint="@string/candidate_hint"
+        android:importantForAutofill="no"
+        android:inputType="textCapSentences|textMultiLine"
+        android:minLines="3"
+        android:text="@string/candidate_defaults"
+        android:textColor="@color/ink"
+        android:textColorHint="#819493" />
+</LinearLayout>

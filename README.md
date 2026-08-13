@@ -2,10 +2,10 @@
 
 This example application accompanies the [Arm Learning Path for running image classification models from the Arm AI Portal](https://learn.arm.com/learning-paths/mobile-graphics-and-gaming/ai-portal-mobile-image-classification). It is intended for learning how models run on devices and is not a reference production application. It is provided under the [Arm Education End User License Agreement](LICENSE.md).
 
-This Android application runs Arm-optimized image models locally on an Arm64 phone or emulator. It provides two workflows:
+This Android application runs Arm-optimized image models locally on an Arm64 phone or emulator. It includes two workflow adapters:
 
-- **Quick Identify** runs a fixed-label ImageNet classifier with LiteRT and XNNPACK. Several different models can be used for this mode.
-- **Custom Match** runs a CLIP model with ExecuTorch and XNNPACK and compares a photo with descriptions entered by the user.
+- `LiteRtImageClassificationAdapter` provides **Quick Identify**, using a fixed-label ImageNet classifier with LiteRT and XNNPACK. Several models can use this adapter.
+- `ExecuTorchClipAdapter` provides **Custom Match**, using CLIP with ExecuTorch and XNNPACK to compare a photo with descriptions entered by the user.
 
 The application imports model binaries at run time, so the model files are not stored in the Android application package (APK).
 
@@ -28,7 +28,7 @@ The application supports fixed-label classification in **Quick Identify** and cu
 
 ## Supported launch models
 
-Keep each downloaded filename unchanged. The launch registry uses the filename to select the task, runtime, and preprocessing profile, then validates the model contract before activation.
+Keep each downloaded filename unchanged. The model registry uses the filename to select one of the two supplied adapters. The adapter then validates the model and handles its controls, preprocessing, runtime calls, and result formatting.
 
 | Model | Runtime | Import this file |
 | --- | --- | --- |
@@ -104,6 +104,12 @@ adb push "$MODEL_FILE" /sdcard/Download/
 The application does not include a sample photo. Each user selects the image they want to analyze from the Android document picker.
 
 The application stores the selected model in its private files directory. Clearing application data or uninstalling the application removes imported models.
+
+## Extend the application
+
+The application discovers modes through `AdapterRegistry.java`. The supplied adapters support LiteRT fixed-label classification and ExecuTorch CLIP matching. `GeneratedAdapterRegistry.java` is intentionally empty and provides a build-time extension point for another model or runtime.
+
+The `adapter-generation/` directory contains scripts and a coding-agent prompt for inspecting a complete model package and preparing another adapter. The current importer accepts one model binary for each registered model. Packages that need multiple model binaries require changes to the importer and adapter contracts. Generated Java code, layouts, resources, and runtime dependencies must be compiled into a new APK and tested on an Arm64 Android device.
 
 ## License
 

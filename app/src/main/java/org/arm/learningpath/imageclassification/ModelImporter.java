@@ -35,13 +35,20 @@ final class ModelImporter {
         ModelDescriptor descriptor = ModelRegistry.forFileName(fileName);
         if (descriptor == null) {
             throw new IOException(
-                    "This launch app does not recognize " + fileName
+                    "This application does not recognize " + fileName
                             + ". Keep the downloaded filename unchanged and select one of: "
                             + ModelRegistry.supportedFiles()
             );
         }
 
-        File destination = modelFile(modelsDirectory, descriptor.task());
+        VisionAdapter adapter = AdapterRegistry.forId(descriptor.adapterId());
+        if (adapter == null) {
+            throw new IOException(
+                    "No application adapter is registered for " + descriptor.adapterId()
+            );
+        }
+
+        File destination = modelFile(modelsDirectory, descriptor);
         File parent = destination.getParentFile();
         if (parent == null || (!parent.isDirectory() && !parent.mkdirs())) {
             throw new IOException("Unable to create app model storage.");
@@ -56,7 +63,7 @@ final class ModelImporter {
                 throw new IOException("Android could not open the selected model file.");
             }
             copy(input, temporaryFile);
-            ModelRunnerRegistry.validate(context, temporaryFile, descriptor);
+            adapter.validateModel(context, temporaryFile, descriptor);
         } catch (Exception exception) {
             temporaryFile.delete();
             throw exception;
@@ -71,104 +78,74 @@ final class ModelImporter {
             throw new IOException("Unable to activate the imported model.");
         }
 
-        writeDescriptorId(parent, descriptor.id());
         State state = new State(descriptor);
-        writeState(modelsDirectory, state);
+        writeAdapterState(modelsDirectory, state);
+        writeActiveState(modelsDirectory, state);
         return new ImportResult(state);
     }
 
     static State activeState(File modelsDirectory) {
-        File stateFile = new File(modelsDirectory, "active-model.json");
+        return readState(new File(modelsDirectory, "active-model.json"), modelsDirectory, null);
+    }
+
+    static State stateForAdapter(File modelsDirectory, String adapterId) {
+        return readState(adapterStateFile(modelsDirectory, adapterId), modelsDirectory, adapterId);
+    }
+
+    static void activate(File modelsDirectory, State state) throws Exception {
+        if (!isInstalled(modelsDirectory, state.descriptor())) {
+            throw new IOException("The selected model mode is not installed.");
+        }
+        writeActiveState(modelsDirectory, state);
+    }
+
+    static File modelFile(File modelsDirectory, ModelDescriptor descriptor) {
+        return new File(new File(modelsDirectory, descriptor.id()), descriptor.fileName());
+    }
+
+    private static State readState(File stateFile, File modelsDirectory, String adapterId) {
         if (!stateFile.isFile()) {
             return null;
         }
         try {
             JSONObject state = new JSONObject(readText(stateFile));
-            boolean legacyState = !state.has("descriptorId");
-            ModelDescriptor descriptor = legacyState
-                    ? ModelRegistry.forStoredName(state.optString("modelName"))
-                    : ModelRegistry.forId(state.getString("descriptorId"));
-            if (descriptor == null || !isInstalled(modelsDirectory, descriptor.task())) {
+            ModelDescriptor descriptor = ModelRegistry.forId(state.getString("descriptorId"));
+            if (descriptor == null
+                    || (adapterId != null && !adapterId.equals(descriptor.adapterId()))
+                    || !isInstalled(modelsDirectory, descriptor)) {
                 return null;
             }
-            State result = new State(descriptor);
-            if (legacyState) {
-                writeDescriptorId(
-                        modelFile(modelsDirectory, descriptor.task()).getParentFile(),
-                        descriptor.id()
-                );
-                writeState(modelsDirectory, result);
-            }
-            return result;
+            return new State(descriptor);
         } catch (Exception ignored) {
             return null;
         }
     }
 
-    static State stateForTask(File modelsDirectory, ModelTask task) {
-        if (!isInstalled(modelsDirectory, task)) {
-            return null;
-        }
-        File descriptorFile = new File(
-                modelFile(modelsDirectory, task).getParentFile(),
-                "descriptor-id.txt"
-        );
-        try {
-            ModelDescriptor descriptor = ModelRegistry.forId(readText(descriptorFile).trim());
-            return descriptor != null && descriptor.task() == task
-                    ? new State(descriptor)
-                    : null;
-        } catch (Exception ignored) {
-            try {
-                File modelDirectory = modelFile(modelsDirectory, task).getParentFile();
-                ModelDescriptor descriptor = ModelRegistry.forStoredName(readText(
-                        new File(modelDirectory, "display-name.txt")
-                ));
-                if (descriptor == null || descriptor.task() != task) {
-                    return null;
-                }
-                writeDescriptorId(modelDirectory, descriptor.id());
-                return new State(descriptor);
-            } catch (Exception legacyImportError) {
-                return null;
-            }
-        }
+    private static boolean isInstalled(File modelsDirectory, ModelDescriptor descriptor) {
+        return modelFile(modelsDirectory, descriptor).isFile();
     }
 
-    static void activate(File modelsDirectory, State state) throws Exception {
-        if (!isInstalled(modelsDirectory, state.task())) {
-            throw new IOException("The selected model mode is not installed.");
-        }
-        writeState(modelsDirectory, state);
+    private static void writeAdapterState(File modelsDirectory, State state) throws Exception {
+        writeState(adapterStateFile(modelsDirectory, state.adapterId()), state);
     }
 
-    static File modelFile(File modelsDirectory, ModelTask task) {
-        return task == ModelTask.DESCRIPTION_MATCHING
-                ? new File(new File(modelsDirectory, "clip"), "model.pte")
-                : new File(new File(modelsDirectory, "litert"), "model.tflite");
+    private static void writeActiveState(File modelsDirectory, State state) throws Exception {
+        writeState(new File(modelsDirectory, "active-model.json"), state);
     }
 
-    private static boolean isInstalled(File modelsDirectory, ModelTask task) {
-        return modelFile(modelsDirectory, task).isFile();
+    private static File adapterStateFile(File modelsDirectory, String adapterId) {
+        return new File(new File(modelsDirectory, "adapter-states"), adapterId + ".json");
     }
 
-    private static void writeState(File modelsDirectory, State state) throws Exception {
-        if (!modelsDirectory.isDirectory() && !modelsDirectory.mkdirs()) {
+    private static void writeState(File stateFile, State state) throws Exception {
+        File parent = stateFile.getParentFile();
+        if (parent == null || (!parent.isDirectory() && !parent.mkdirs())) {
             throw new IOException("Unable to create app model storage.");
         }
         JSONObject value = new JSONObject();
         value.put("descriptorId", state.descriptor().id());
-        try (FileOutputStream output = new FileOutputStream(
-                new File(modelsDirectory, "active-model.json"))) {
+        try (FileOutputStream output = new FileOutputStream(stateFile)) {
             output.write(value.toString(2).getBytes(StandardCharsets.UTF_8));
-        }
-    }
-
-    private static void writeDescriptorId(File modelDirectory, String descriptorId)
-            throws IOException {
-        try (FileOutputStream output = new FileOutputStream(
-                new File(modelDirectory, "descriptor-id.txt"))) {
-            output.write(descriptorId.getBytes(StandardCharsets.UTF_8));
         }
     }
 
@@ -220,8 +197,8 @@ final class ModelImporter {
     }
 
     record State(ModelDescriptor descriptor) {
-        ModelTask task() {
-            return descriptor.task();
+        String adapterId() {
+            return descriptor.adapterId();
         }
     }
 

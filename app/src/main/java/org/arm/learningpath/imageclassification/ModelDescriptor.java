@@ -3,27 +3,11 @@ package org.arm.learningpath.imageclassification;
 record ModelDescriptor(
         String id,
         String displayName,
-        ModelTask task,
-        ModelRuntime runtime,
-        String fileName,
-        LiteRtClassifier.PreprocessingProfile preprocessingProfile
+        String adapterId,
+        String runtimeDisplayName,
+        String fileName
 ) {
-    enum ModelRuntime {
-        LITERT("LiteRT"),
-        EXECUTORCH("ExecuTorch");
-
-        private final String displayName;
-
-        ModelRuntime(String displayName) {
-            this.displayName = displayName;
-        }
-
-        String displayName() {
-            return displayName;
-        }
-    }
-
     String displayLabel() {
-        return displayName + " · " + runtime.displayName();
+        return displayName + " · " + runtimeDisplayName;
     }
 }

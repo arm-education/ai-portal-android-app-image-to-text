@@ -37,9 +37,10 @@ final class LiteRtClassifier implements Closeable {
     private final int inputHeight;
     private final int inputWidth;
 
-    LiteRtClassifier(Context context, File modelFile, ModelDescriptor descriptor) throws Exception {
-        modelName = descriptor.displayLabel();
-        preprocessingProfile = descriptor.preprocessingProfile();
+    LiteRtClassifier(Context context, File modelFile, String displayName,
+                     PreprocessingProfile profile) throws Exception {
+        modelName = displayName;
+        preprocessingProfile = profile;
         if (preprocessingProfile == null) {
             throw new IllegalArgumentException("The classifier is missing a preprocessing profile.");
         }
