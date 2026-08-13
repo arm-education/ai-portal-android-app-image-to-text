@@ -24,6 +24,7 @@ def main() -> None:
         "GeneratedAdapterRegistry.java"
     )
     dependencies = project_root / "app/generated-runtime-dependencies.gradle.kts"
+    adapter_path = args.adapter if args.adapter.is_absolute() else project_root / args.adapter
     paths = [args.adapter, registry, dependencies]
     if args.layout:
         paths.append(args.layout)
@@ -33,12 +34,34 @@ def main() -> None:
         resolved = path if path.is_absolute() else project_root / path
         if not resolved.is_file():
             errors.append(f"Missing file: {resolved}")
+            if resolved == adapter_path:
+                source_directory = registry.parent
+                supplied_adapters = {
+                    "ExecuTorchClipAdapter.java",
+                    "LiteRtImageClassificationAdapter.java",
+                }
+                candidates = []
+                for candidate in sorted(source_directory.glob("*.java")):
+                    if candidate.name in supplied_adapters:
+                        continue
+                    source = candidate.read_text(encoding="utf-8")
+                    if "implements VisionAdapter" in source:
+                        candidates.append(candidate.relative_to(project_root).as_posix())
+                if candidates:
+                    errors.append(
+                        "Possible generated adapter files: " + ", ".join(candidates)
+                    )
+            elif args.layout and resolved == (
+                args.layout if args.layout.is_absolute() else project_root / args.layout
+            ):
+                errors.append(
+                    "Omit --layout when the generated adapter does not add a layout file"
+                )
             continue
         content = resolved.read_text(encoding="utf-8")
         if PLACEHOLDER_PATTERN.search(content):
             errors.append(f"Unresolved placeholder in {resolved}")
 
-    adapter_path = args.adapter if args.adapter.is_absolute() else project_root / args.adapter
     if adapter_path.is_file():
         adapter_source = adapter_path.read_text(encoding="utf-8")
         if "implements VisionAdapter" not in adapter_source:

@@ -39,10 +39,16 @@ that a generic runtime API can execute the packaged model.
 
 For ExecuTorch packages, determine whether the .pte program needs custom or
 backend-specific operators that are not registered by the standard Android
-runtime dependency. Do not generate an adapter unless the required runner,
-operator library, and arm64-v8a Android artifact can be identified from trusted
-documentation. Stop and report the incompatibility rather than generating a
-plausible adapter that cannot load the model.
+runtime dependency. If the package requires a custom runner or operator library,
+do not generate an adapter unless its arm64-v8a Android artifact can be identified
+from trusted documentation.
+
+If the package documents a standard ExecuTorch or XNNPACK workflow but does not
+record the exact export version, the existing executorch-android dependency can
+be used as a compatibility candidate. Generate the adapter, but state that model
+loading remains unverified until the .pte file runs on the target device. Treat a
+load or operator-registration failure as a compatibility failure; do not hide it
+with another model, runtime, or fallback path.
 
 The generated adapter must:
 
@@ -66,3 +72,7 @@ build and lint tasks. Otherwise, state that these checks must be run in the
 cloned project. Report build and lint results separately from the on-device
 model test. Do not describe the adapter as supported unless the representative
 on-device test succeeds.
+
+In the final response, include the exact validate_generated_adapter.py command
+using the adapter and layout paths that were created. Omit --layout when the
+adapter does not add a layout file. Do not report placeholder filenames.
