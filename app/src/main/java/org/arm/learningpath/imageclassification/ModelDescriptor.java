@@ -5,8 +5,19 @@ record ModelDescriptor(
         String displayName,
         String adapterId,
         String runtimeDisplayName,
-        String fileName
+        String fileName,
+        String configurationId
 ) {
+    ModelDescriptor(
+            String id,
+            String displayName,
+            String adapterId,
+            String runtimeDisplayName,
+            String fileName
+    ) {
+        this(id, displayName, adapterId, runtimeDisplayName, fileName, "");
+    }
+
     String displayLabel() {
         return displayName + " · " + runtimeDisplayName;
     }

@@ -38,6 +38,7 @@ def main() -> None:
                 source_directory = registry.parent
                 supplied_adapters = {
                     "ExecuTorchClipAdapter.java",
+                    "ExecuTorchImageClassificationAdapter.java",
                     "LiteRtImageClassificationAdapter.java",
                 }
                 candidates = []
@@ -66,6 +67,11 @@ def main() -> None:
         adapter_source = adapter_path.read_text(encoding="utf-8")
         if "implements VisionAdapter" not in adapter_source:
             errors.append("The generated class must implement VisionAdapter")
+        if "descriptor.runtimeDisplayName()" in adapter_source:
+            errors.append(
+                "Do not validate runtime compatibility using runtimeDisplayName; "
+                "it is presentation text"
+            )
 
     if registry.is_file() and "return List.of();" in registry.read_text(encoding="utf-8"):
         errors.append("GeneratedAdapterRegistry does not register an adapter or model")

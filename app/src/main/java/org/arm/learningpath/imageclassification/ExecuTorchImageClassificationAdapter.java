@@ -8,22 +8,23 @@ import android.view.ViewGroup;
 
 import java.io.File;
 
-final class LiteRtImageClassificationAdapter implements VisionAdapter {
-    static final String ID = "litert-image-classification";
+final class ExecuTorchImageClassificationAdapter implements VisionAdapter {
+    static final String ID = "executorch-image-classification";
     static final String PROFILE_IMAGENET_CROP_256 = "imagenet-crop-256";
-    static final String PROFILE_SYMMETRIC_CROP_232 = "symmetric-crop-232";
+    static final String PROFILE_IMAGENET_CROP_342 = "imagenet-crop-342";
+    static final String PROFILE_IMAGENET_CROP_232 = "imagenet-crop-232";
     static final String PROFILE_SYMMETRIC_DIRECT_RESIZE = "symmetric-direct-resize";
 
     private static final AdapterDefinition DEFINITION = new AdapterDefinition(
             ID,
-            R.string.quick_mode_title,
-            R.string.quick_mode_description,
-            R.string.import_quick_model,
+            R.string.executorch_classification_mode_title,
+            R.string.executorch_classification_mode_description,
+            R.string.import_executorch_classifier,
             R.string.identify_photo,
-            R.string.quick_model_missing,
-            R.string.quick_model_ready,
-            R.string.litert_ready,
-            R.string.running_litert
+            R.string.executorch_classifier_missing,
+            R.string.executorch_classifier_ready,
+            R.string.executorch_classification_ready,
+            R.string.running_executorch_classification
     );
 
     @Override
@@ -45,9 +46,11 @@ final class LiteRtImageClassificationAdapter implements VisionAdapter {
     public ModelRunner createRunner(Context context, File modelFile,
                                     ModelDescriptor descriptor) throws Exception {
         if (!ID.equals(descriptor.adapterId())) {
-            throw new IllegalArgumentException("The LiteRT adapter received another model type.");
+            throw new IllegalArgumentException(
+                    "The ExecuTorch classification adapter received another model type."
+            );
         }
-        LiteRtClassifier classifier = new LiteRtClassifier(
+        ExecuTorchImageClassifier classifier = new ExecuTorchImageClassifier(
                 context,
                 modelFile,
                 descriptor.displayLabel(),
@@ -58,10 +61,10 @@ final class LiteRtImageClassificationAdapter implements VisionAdapter {
             public String run(Bitmap bitmap, AdapterInput input) {
                 if (!(input instanceof EmptyAdapterInput)) {
                     throw new IllegalArgumentException(
-                            "The LiteRT classifier does not accept text input."
+                            "The ExecuTorch classifier does not accept text input."
                     );
                 }
-                return classifier.classify(bitmap).formattedResults();
+                return classifier.classify(bitmap);
             }
 
             @Override
@@ -71,17 +74,19 @@ final class LiteRtImageClassificationAdapter implements VisionAdapter {
         };
     }
 
-    private static LiteRtClassifier.PreprocessingProfile preprocessingProfile(
+    private static ExecuTorchImageClassifier.PreprocessingProfile preprocessingProfile(
             ModelDescriptor descriptor) {
         return switch (descriptor.configurationId()) {
+            case PROFILE_IMAGENET_CROP_342 ->
+                    ExecuTorchImageClassifier.PreprocessingProfile.IMAGENET_CROP_342;
+            case PROFILE_IMAGENET_CROP_232 ->
+                    ExecuTorchImageClassifier.PreprocessingProfile.IMAGENET_CROP_232;
             case PROFILE_SYMMETRIC_DIRECT_RESIZE ->
-                    LiteRtClassifier.PreprocessingProfile.SYMMETRIC_DIRECT_RESIZE;
-            case PROFILE_SYMMETRIC_CROP_232 ->
-                    LiteRtClassifier.PreprocessingProfile.SYMMETRIC_CROP_232;
+                    ExecuTorchImageClassifier.PreprocessingProfile.SYMMETRIC_DIRECT_RESIZE;
             case PROFILE_IMAGENET_CROP_256 ->
-                    LiteRtClassifier.PreprocessingProfile.IMAGENET_CROP_256;
+                    ExecuTorchImageClassifier.PreprocessingProfile.IMAGENET_CROP_256;
             default -> throw new IllegalArgumentException(
-                    "No LiteRT preprocessing profile is registered for "
+                    "No ExecuTorch preprocessing profile is registered for "
                             + descriptor.configurationId()
             );
         };

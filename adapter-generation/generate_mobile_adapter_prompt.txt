@@ -7,9 +7,9 @@ select another runtime, or obtain another model package.
 
 Read VisionAdapter.java, AdapterDefinition.java, AdapterInput.java,
 ModelRunner.java, ModelDescriptor.java, LiteRtImageClassificationAdapter.java,
-ExecuTorchClipAdapter.java, GeneratedAdapterRegistry.java, and
-app/generated-runtime-dependencies.gradle.kts. Preserve their contracts and
-keep the two provided adapters unchanged.
+ExecuTorchImageClassificationAdapter.java, ExecuTorchClipAdapter.java,
+GeneratedAdapterRegistry.java, and app/generated-runtime-dependencies.gradle.kts.
+Preserve their contracts and keep the three provided adapters unchanged.
 
 Create a model-specific class that implements VisionAdapter. Add a task-specific
 layout only when the workflow needs controls beyond selecting an image. Register
@@ -24,11 +24,11 @@ time, stop and report that the importer and adapter contracts need to be extende
 Static labels, tokenizer data, or configuration can be added as reviewed Android
 resources when the model package requires them.
 
-A conventional ExecuTorch image classifier is one possible extension. It is an
-example, not an assumption about the supplied package. Determine the actual task,
-inputs, preprocessing, callable methods, outputs, labels, and result presentation
-from the downloaded package. Stop and report missing information rather than
-guessing.
+First compare the package with the supplied LiteRT classification, ExecuTorch
+classification, and ExecuTorch CLIP contracts. Generate another adapter only when
+the package does not fit them. Determine the actual task, inputs, preprocessing,
+callable methods, outputs, labels, and result presentation from the downloaded
+package. Stop and report missing information rather than guessing.
 
 Treat runtime compatibility as more than matching the model-file extension.
 Inspect the package documentation and configuration for required Android
@@ -53,6 +53,8 @@ with another model, runtime, or fallback path.
 The generated adapter must:
 
 - validate the selected model filename and any required static app resources
+- treat ModelDescriptor.runtimeDisplayName as UI text, not a compatibility identifier
+- set ModelDescriptor.configurationId to the adapter-specific configuration needed by the model
 - load imported model files only from Android application storage
 - implement the documented resize, crop, color, layout, data type, and normalization
 - validate runtime methods, tensor shapes, and output types before inference

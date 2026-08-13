@@ -25,6 +25,7 @@ final class AdapterRegistry {
     private static List<VisionAdapter> createAdapters() {
         List<VisionAdapter> adapters = new ArrayList<>();
         adapters.add(new LiteRtImageClassificationAdapter());
+        adapters.add(new ExecuTorchImageClassificationAdapter());
         adapters.add(new ExecuTorchClipAdapter());
         adapters.addAll(GeneratedAdapterRegistry.adapters());
         return List.copyOf(adapters);

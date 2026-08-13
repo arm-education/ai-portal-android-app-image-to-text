@@ -1,9 +1,11 @@
 .gradle/
+.DS_Store
 .idea/
 local.properties
 models/
 photo-insight-*.jpg
 .hf-venv/
+__pycache__/
 **/build/
 *.iml
 !app/src/main/AndroidManifest.xml

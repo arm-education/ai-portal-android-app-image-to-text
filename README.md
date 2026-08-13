@@ -2,33 +2,35 @@
 
 This example application accompanies the [Arm Learning Path for running image classification models from the Arm AI Portal](https://learn.arm.com/learning-paths/mobile-graphics-and-gaming/ai-portal-mobile-image-classification). It is intended for learning how models run on devices and is not a reference production application. It is provided under the [Arm Education End User License Agreement](LICENSE.md).
 
-This Android application runs Arm-optimized image models locally on an Arm64 phone or emulator. It includes two workflow adapters:
+This Android application runs Arm-optimized image models locally on an Arm64 phone or emulator. It includes three supplied adapters:
 
-- `LiteRtImageClassificationAdapter` provides **Quick Identify**, using a fixed-label ImageNet classifier with LiteRT and XNNPACK. Several models can use this adapter.
-- `ExecuTorchClipAdapter` provides **Custom Match**, using CLIP with ExecuTorch and XNNPACK to compare a photo with descriptions entered by the user.
+- `LiteRtImageClassificationAdapter` provides **LiteRT Quick Identify**, using a fixed-label ImageNet classifier with LiteRT and XNNPACK. Several models can use this adapter.
+- `ExecuTorchImageClassificationAdapter` provides **ExecuTorch Quick Identify**, using a fixed-label ImageNet classifier with ExecuTorch and XNNPACK. Several models can use this adapter.
+- `ExecuTorchClipAdapter` provides **ExecuTorch CLIP Custom Match**, using CLIP with ExecuTorch and XNNPACK to compare a photo with descriptions entered by the user.
 
 The application imports model binaries at run time, so the model files are not stored in the Android application package (APK).
 
 ## Application views
 
 <p align="center">
-  <img src="docs/images/photo-insight-startup.png" width="30%" alt="Photo Insight start screen before a model or photo has been selected">
-  <img src="docs/images/photo-insight-quick-identify.png" width="30%" alt="Quick Identify classifying a dog with MobileNetV3 Small and LiteRT">
-  <img src="docs/images/photo-insight-custom-match.png" width="30%" alt="Custom Match comparing a dog photo with candidate descriptions using CLIP and ExecuTorch">
+  <img src="docs/images/photo-insight-startup.png" width="23%" alt="Photo Insight start screen with LiteRT Quick Identify selected before a model or photo has been added">
+  <img src="docs/images/photo-insight-quick-identify.png" width="23%" alt="LiteRT Quick Identify classifying a Samoyed puppy with MobileNetV3 Small">
+  <img src="docs/images/photo-insight-executorch-identify.png" width="23%" alt="ExecuTorch Quick Identify classifying a Samoyed puppy with DEiT Tiny">
+  <img src="docs/images/photo-insight-custom-match.png" width="23%" alt="ExecuTorch CLIP Custom Match ranking dog first for a Samoyed puppy photograph">
 </p>
 
-The application supports fixed-label classification in **Quick Identify** and custom image-text matching in **Custom Match**.
+The application supports fixed-label classification with LiteRT or ExecuTorch, and custom image-text matching with ExecuTorch CLIP.
 
 ## Requirements
 
 - Android Studio with Android SDK 35
 - Java 17, supplied by Android Studio
 - An Arm64 Android device running Android 9, API 28, or later
-- One supported model file downloaded from the Arm AI Portal
+- One supported or registered model file downloaded from the Arm AI Portal
 
 ## Supported launch models
 
-Keep each downloaded filename unchanged. The model registry uses the filename to select one of the two supplied adapters. The adapter then validates the model and handles its controls, preprocessing, runtime calls, and result formatting.
+The model registry uses the filename to select one of the three supplied adapters. The adapter then validates the model and handles its controls, preprocessing, runtime calls, and result formatting.
 
 | Model | Runtime | Import this file |
 | --- | --- | --- |
@@ -37,6 +39,16 @@ Keep each downloaded filename unchanged. The model registry uses the filename to
 | [MobileNetV3 Small LiteRT](https://huggingface.co/Arm/mobilenet-v3-small-int8-litert) | LiteRT | `mobilenet-v3-small-int8-litert.tflite` |
 | [Swin Tiny LiteRT](https://huggingface.co/Arm/swin-tiny-int8-litert) | LiteRT | `swin-tiny-int8-litert.tflite` |
 | [timm ViT LiteRT](https://huggingface.co/Arm/vit-base-timm-int8-litert) | LiteRT | `vit-base-timm-int8-litert.tflite` |
+| [DEiT Tiny ExecuTorch](https://huggingface.co/Arm/deit-tiny-int8-xnnpack-executorch) | ExecuTorch | `deit-tiny-int8-executorch.pte` |
+| [GoogLeNet ExecuTorch](https://huggingface.co/Arm/googlenet-int8-xnnpack-executorch-raspberrypi5) | ExecuTorch | `googlenet-int8-executorch.pte` |
+| [Inception V3 ExecuTorch](https://huggingface.co/Arm/inception-v3-int8-xnnpack-executorch-raspberrypi5) | ExecuTorch | `inception-v3-int8-executorch.pte` |
+| [MobileNetV3 Small ExecuTorch](https://huggingface.co/Arm/mobilenet-v3-small-int8-xnnpack-executorch) | ExecuTorch | `mobilenet-v3-small-int8-executorch.pte` |
+| [ResNet-18 ExecuTorch](https://huggingface.co/Arm/resnet-18-int8-xnnpack-executorch) | ExecuTorch | `resnet-18-int8-executorch.pte` |
+| [ResNet-50 ExecuTorch](https://huggingface.co/Arm/resnet-50-int8-xnnpack-executorch) | ExecuTorch | `resnet-50-int8-executorch.pte` |
+| [ShuffleNet V2 x1.0 ExecuTorch](https://huggingface.co/Arm/shufflenet-v2-x1-0-int8-xnnpack-executorch) | ExecuTorch | `shufflenet-v2-x1-0-int8-executorch.pte` |
+| [SqueezeNet 1.1 ExecuTorch](https://huggingface.co/Arm/squeezenet-1-1-int8-xnnpack-executorch) | ExecuTorch | `squeezenet-1-1-int8-executorch.pte` |
+| [Swin Tiny ExecuTorch](https://huggingface.co/Arm/swin-tiny-int8-xnnpack-executorch) | ExecuTorch | `swin-tiny-int8-executorch.pte` |
+| [ViT Base ExecuTorch](https://huggingface.co/Arm/vit-base-int8-xnnpack-executorch) | ExecuTorch | `vit-base-int8-executorch.pte` |
 | [CLIP ViT-B/32 ExecuTorch](https://huggingface.co/Arm/clip-vit-base-patch32-int8-xnnpack-executorch) | ExecuTorch | `clip-vit-base-patch32-int8-executorch.pte` |
 
 ## Download a model
@@ -83,7 +95,7 @@ $MODEL_FILE = python download_model.py `
 Write-Output "Model file: $MODEL_FILE"
 ```
 
-The script downloads only the optimized `.tflite` or `.pte` file accepted by the application. It stores the file under `models/` and preserves the filename used by `ModelRegistry.java`.
+For a supported model, the script downloads the registered `.tflite` or `.pte` file. For another repository, it downloads the package and selects its only `.tflite` or `.pte` file. Use `--filename` if the repository contains more than one model file.
 
 Copy the downloaded model to the Android **Downloads** directory through ADB:
 
@@ -98,18 +110,39 @@ adb push "$MODEL_FILE" /sdcard/Download/
 3. Wait for Gradle sync to finish.
 4. Connect an Arm64 Android phone or start an Arm64 emulator.
 5. Select the `app` configuration and run it.
-6. Select **Add classifier model** or **Add CLIP model** and choose the matching optimized file.
-7. Select **Choose a photo**, then run **Quick Identify** or **Custom Match**.
+6. Select **Add or change model** and choose the matching optimized file.
+7. Select **Choose a photo**, then run **LiteRT Quick Identify**, **ExecuTorch Quick Identify**, or **ExecuTorch CLIP Custom Match**.
 
 The application does not include a sample photo. Each user selects the image they want to analyze from the Android document picker.
 
 The application stores the selected model in its private files directory. Clearing application data or uninstalling the application removes imported models.
 
+## Register another compatible model
+
+A model that matches an existing adapter's task, tensor contract, labels, and preprocessing can use that adapter after you add one `ModelDescriptor` to `CompatibleModelRegistry.java`.
+
+Each descriptor records the filename, adapter, and preprocessing configuration together. For example, a LiteRT ImageNet classifier that uses the same preprocessing as MobileNetV3 Small can be registered with:
+
+```java
+new ModelDescriptor(
+        "my-litert-classifier",
+        "My LiteRT classifier",
+        LiteRtImageClassificationAdapter.ID,
+        "LiteRT",
+        "my-classifier.tflite",
+        LiteRtImageClassificationAdapter.PROFILE_IMAGENET_CROP_256
+)
+```
+
+Add the descriptor to the list returned by `CompatibleModelRegistry.models()`, rebuild the APK, and import the model using its unchanged filename. This route reuses an existing adapter. It is appropriate only when the model package matches that adapter's complete input, output, label, and preprocessing contract.
+
+If the model has the same task and tensor contract but needs different resizing, cropping, normalization, or input dimensions, add a preprocessing profile to the existing classifier and adapter. Reference the new profile from the descriptor. Create a separate adapter only when the model changes the inputs, outputs, callable methods, runtime, result decoding, or application controls.
+
 ## Extend the application
 
-The application discovers modes through `AdapterRegistry.java`. The supplied adapters support LiteRT fixed-label classification and ExecuTorch CLIP matching. `GeneratedAdapterRegistry.java` is intentionally empty and provides a build-time extension point for another model or runtime.
+The application discovers modes through `AdapterRegistry.java`. The supplied adapters support LiteRT classification, ExecuTorch classification, and ExecuTorch CLIP matching. `GeneratedAdapterRegistry.java` is intentionally empty and provides a build-time extension point for a model package that does not fit those adapters.
 
-The `adapter-generation/` directory contains scripts and a coding-agent prompt for inspecting a complete model package and preparing another adapter. The current importer accepts one model binary for each registered model. Packages that need multiple model binaries require changes to the importer and adapter contracts. Generated Java code, layouts, resources, and runtime dependencies must be compiled into a new APK and tested on an Arm64 Android device.
+As an optional extra, the `adapter-generation/` directory contains scripts and a coding-agent prompt for inspecting a complete model package and preparing another adapter. The current importer accepts one model binary for each registered model. Packages that need multiple model binaries need changes to the importer and adapter contracts. Generated Java code, layouts, resources, and runtime dependencies must be compiled into a new APK and tested on an Arm64 Android device.
 
 ## License
 
