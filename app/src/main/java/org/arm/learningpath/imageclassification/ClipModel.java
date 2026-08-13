@@ -200,10 +200,10 @@ final class ClipModel implements Closeable {
         String display(int rank) {
             return String.format(
                     Locale.US,
-                    "%d. %-24s %6.2f%%",
+                    "%d. %6.2f%%  %s",
                     rank,
-                    label,
-                    probability * 100.0f
+                    probability * 100.0f,
+                    label
             );
         }
     }

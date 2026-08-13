@@ -53,7 +53,6 @@ final class ExecuTorchImageClassificationAdapter implements VisionAdapter {
         ExecuTorchImageClassifier classifier = new ExecuTorchImageClassifier(
                 context,
                 modelFile,
-                descriptor.displayLabel(),
                 preprocessingProfile(descriptor)
         );
         return new ModelRunner() {

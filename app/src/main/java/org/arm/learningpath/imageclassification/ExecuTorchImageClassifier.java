@@ -36,16 +36,14 @@ final class ExecuTorchImageClassifier implements Closeable {
     private static final float[] HALF_STANDARD_DEVIATION = {0.5f, 0.5f, 0.5f};
 
     private final Module module;
-    private final String modelName;
     private final PreprocessingProfile preprocessingProfile;
     private final List<String> labels;
 
-    ExecuTorchImageClassifier(Context context, File modelFile, String displayName,
+    ExecuTorchImageClassifier(Context context, File modelFile,
                               PreprocessingProfile profile) throws Exception {
         if (!modelFile.isFile() || modelFile.length() == 0) {
             throw new IllegalArgumentException("The imported ExecuTorch model is unavailable.");
         }
-        modelName = displayName;
         preprocessingProfile = profile;
         labels = readLabels(context);
 
@@ -247,8 +245,7 @@ final class ExecuTorchImageClassifier implements Closeable {
         ).reversed());
 
         StringBuilder output = new StringBuilder();
-        output.append("Model: ").append(modelName).append('\n');
-        output.append("Inference: ").append(elapsedMilliseconds).append(" ms\n\n");
+        output.append("Processing time: ").append(elapsedMilliseconds).append(" ms\n\n");
         for (int rank = 0; rank < TOP_K; rank++) {
             int index = indices.get(rank);
             output.append(String.format(

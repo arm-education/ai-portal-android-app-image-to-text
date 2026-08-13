@@ -295,7 +295,7 @@ final class LiteRtClassifier implements Closeable {
                                  List<Prediction> predictions) {
         public String formattedResults() {
             StringBuilder text = new StringBuilder();
-            text.append("Inference: ").append(elapsedMilliseconds).append(" ms\n\n");
+            text.append("Processing time: ").append(elapsedMilliseconds).append(" ms\n\n");
             for (int index = 0; index < predictions.size(); index++) {
                 Prediction prediction = predictions.get(index);
                 text.append(String.format(

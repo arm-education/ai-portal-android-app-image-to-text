@@ -67,15 +67,15 @@ final class ExecuTorchClipAdapter implements VisionAdapter {
                         descriptionInput.descriptions()
                 );
                 StringBuilder output = new StringBuilder();
+                output.append(String.format(
+                        Locale.US,
+                        "Processing time: %,d ms%n%n",
+                        result.elapsedMilliseconds()
+                ));
                 int rank = 1;
                 for (ClipModel.ScoredLabel label : result.labels()) {
                     output.append(label.display(rank++)).append('\n');
                 }
-                output.append(String.format(
-                        Locale.US,
-                        "\nAnalysis time: %,d ms",
-                        result.elapsedMilliseconds()
-                ));
                 return output.toString();
             }
 
