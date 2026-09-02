@@ -32,9 +32,6 @@ def primary_model_path(directory: Path) -> Path:
             ) from exception
         if candidate.is_file():
             return candidate
-        raise SystemExit(
-            f"The primary model file recorded in {metadata_path} was not found: {candidate}"
-        )
 
     candidates = [
         path.resolve()
@@ -45,6 +42,13 @@ def primary_model_path(directory: Path) -> Path:
         return candidates[0]
     if not candidates:
         raise SystemExit("The downloaded package does not identify a model binary.")
+
+    optimized_candidates = [
+        path for path in candidates if "optimized" in path.stem.lower()
+    ]
+    if len(optimized_candidates) == 1:
+        return optimized_candidates[0]
+
     raise SystemExit(
         "The downloaded package contains multiple model binaries and does not identify "
         "the primary file in metadata.yaml."

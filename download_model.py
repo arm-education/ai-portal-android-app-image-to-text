@@ -1,36 +1,42 @@
 #!/usr/bin/env python3
 
 import argparse
+import shutil
 import sys
 from pathlib import Path
 
 
 VERIFIED_MODELS = {
-    "Arm/deit-tiny-int8-litert": "deit-tiny-int8-litert.tflite",
-    "Arm/vit-base-int8-litert": "vit-base-int8-litert.tflite",
-    "Arm/mobilenet-v3-small-int8-litert": "mobilenet-v3-small-int8-litert.tflite",
-    "Arm/swin-tiny-int8-litert": "swin-tiny-int8-litert.tflite",
-    "Arm/vit-base-timm-int8-litert": "vit-base-timm-int8-litert.tflite",
-    "Arm/deit-tiny-int8-xnnpack-executorch": "deit-tiny-int8-executorch.pte",
+    "Arm/deit-tiny-int8-litert": "facebook__deit-tiny-patch16-224_litert_optimized.tflite",
+    "Arm/vit-base-int8-litert": "google__vit-base-patch16-224_android_litert_optimized.tflite",
+    "Arm/mobilenet-v3-small-int8-litert": "mobilenet_v3_small_android_litert_optimized.tflite",
+    "Arm/swin-tiny-int8-litert": "microsoft__swin-tiny-patch4-window7-224_android_litert_optimized.tflite",
+    "Arm/vit-base-timm-int8-litert": "timm__vit_base_patch16_224.augreg_in21k_ft_in1k_android_litert_optimized.tflite",
+    "Arm/deit-tiny-int8-xnnpack-executorch": "deit_raspberry_executorch_optimized.pte",
     "Arm/googlenet-int8-xnnpack-executorch-raspberrypi5": (
-        "googlenet-int8-executorch.pte"
+        "googlenet_raspberry_executorch_optimized.pte"
     ),
     "Arm/inception-v3-int8-xnnpack-executorch-raspberrypi5": (
-        "inception-v3-int8-executorch.pte"
+        "inception_v3_raspberry_executorch_optimized.pte"
     ),
+    "Arm/mobilenet-v3-small-int8-xnnpack-executorch": "optimized.pte",
+    "Arm/resnet-18-int8-xnnpack-executorch": "resnet-18_raspberry_executorch_optimized.pte",
+    "Arm/resnet-50-int8-xnnpack-executorch": "resnet-50_raspberry_executorch_optimized.pte",
+    "Arm/shufflenet-v2-x1-0-int8-xnnpack-executorch": (
+        "shufflenet_v2_x1_0_raspberry_executorch_optimized.pte"
+    ),
+    "Arm/squeezenet-1-1-int8-xnnpack-executorch": (
+        "squeezenet_1_1_raspberry_executorch_optimized.pte"
+    ),
+    "Arm/swin-tiny-int8-xnnpack-executorch": "swin_tiny_dynamic_raspberry_executorch_optimized.pte",
+    "Arm/vit-base-int8-xnnpack-executorch": "google__vit-base-patch16-224_raspberry_executorch_optimized.pte",
+    "Arm/clip-vit-base-patch32-int8-xnnpack-executorch": "optimized.pte",
+}
+
+IMPORT_FILENAMES = {
     "Arm/mobilenet-v3-small-int8-xnnpack-executorch": (
         "mobilenet-v3-small-int8-executorch.pte"
     ),
-    "Arm/resnet-18-int8-xnnpack-executorch": "resnet-18-int8-executorch.pte",
-    "Arm/resnet-50-int8-xnnpack-executorch": "resnet-50-int8-executorch.pte",
-    "Arm/shufflenet-v2-x1-0-int8-xnnpack-executorch": (
-        "shufflenet-v2-x1-0-int8-executorch.pte"
-    ),
-    "Arm/squeezenet-1-1-int8-xnnpack-executorch": (
-        "squeezenet-1-1-int8-executorch.pte"
-    ),
-    "Arm/swin-tiny-int8-xnnpack-executorch": "swin-tiny-int8-executorch.pte",
-    "Arm/vit-base-int8-xnnpack-executorch": "vit-base-int8-executorch.pte",
     "Arm/clip-vit-base-patch32-int8-xnnpack-executorch": (
         "clip-vit-base-patch32-int8-executorch.pte"
     ),
@@ -85,6 +91,10 @@ def main() -> None:
                 local_dir=destination,
             )
         )
+        if args.filename is None and args.repo_id in IMPORT_FILENAMES:
+            import_path = destination / IMPORT_FILENAMES[args.repo_id]
+            shutil.copy2(downloaded_path, import_path)
+            downloaded_path = import_path
     else:
         print(f"Downloading {args.repo_id} to {destination} ...", file=output_stream)
         snapshot_path = Path(

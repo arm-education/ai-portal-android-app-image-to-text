@@ -11,7 +11,7 @@ final class ModelRegistry {
                     "DEiT Tiny",
                     LiteRtImageClassificationAdapter.ID,
                     "LiteRT",
-                    "deit-tiny-int8-litert.tflite",
+                    "facebook__deit-tiny-patch16-224_litert_optimized.tflite",
                     LiteRtImageClassificationAdapter.PROFILE_IMAGENET_CROP_256
             ),
             new ModelDescriptor(
@@ -19,7 +19,7 @@ final class ModelRegistry {
                     "Google ViT",
                     LiteRtImageClassificationAdapter.ID,
                     "LiteRT",
-                    "vit-base-int8-litert.tflite",
+                    "google__vit-base-patch16-224_android_litert_optimized.tflite",
                     LiteRtImageClassificationAdapter.PROFILE_SYMMETRIC_DIRECT_RESIZE
             ),
             new ModelDescriptor(
@@ -27,7 +27,7 @@ final class ModelRegistry {
                     "MobileNetV3 Small",
                     LiteRtImageClassificationAdapter.ID,
                     "LiteRT",
-                    "mobilenet-v3-small-int8-litert.tflite",
+                    "mobilenet_v3_small_android_litert_optimized.tflite",
                     LiteRtImageClassificationAdapter.PROFILE_IMAGENET_CROP_256
             ),
             new ModelDescriptor(
@@ -35,7 +35,7 @@ final class ModelRegistry {
                     "Swin Tiny",
                     LiteRtImageClassificationAdapter.ID,
                     "LiteRT",
-                    "swin-tiny-int8-litert.tflite",
+                    "microsoft__swin-tiny-patch4-window7-224_android_litert_optimized.tflite",
                     LiteRtImageClassificationAdapter.PROFILE_IMAGENET_CROP_256
             ),
             new ModelDescriptor(
@@ -43,7 +43,7 @@ final class ModelRegistry {
                     "timm ViT",
                     LiteRtImageClassificationAdapter.ID,
                     "LiteRT",
-                    "vit-base-timm-int8-litert.tflite",
+                    "timm__vit_base_patch16_224.augreg_in21k_ft_in1k_android_litert_optimized.tflite",
                     LiteRtImageClassificationAdapter.PROFILE_SYMMETRIC_CROP_232
             ),
             new ModelDescriptor(
@@ -51,7 +51,7 @@ final class ModelRegistry {
                     "DEiT Tiny",
                     ExecuTorchImageClassificationAdapter.ID,
                     "ExecuTorch",
-                    "deit-tiny-int8-executorch.pte",
+                    "deit_raspberry_executorch_optimized.pte",
                     ExecuTorchImageClassificationAdapter.PROFILE_IMAGENET_CROP_256
             ),
             new ModelDescriptor(
@@ -59,7 +59,7 @@ final class ModelRegistry {
                     "GoogLeNet",
                     ExecuTorchImageClassificationAdapter.ID,
                     "ExecuTorch",
-                    "googlenet-int8-executorch.pte",
+                    "googlenet_raspberry_executorch_optimized.pte",
                     ExecuTorchImageClassificationAdapter.PROFILE_IMAGENET_CROP_256
             ),
             new ModelDescriptor(
@@ -67,7 +67,7 @@ final class ModelRegistry {
                     "Inception V3",
                     ExecuTorchImageClassificationAdapter.ID,
                     "ExecuTorch",
-                    "inception-v3-int8-executorch.pte",
+                    "inception_v3_raspberry_executorch_optimized.pte",
                     ExecuTorchImageClassificationAdapter.PROFILE_IMAGENET_CROP_342
             ),
             new ModelDescriptor(
@@ -83,7 +83,7 @@ final class ModelRegistry {
                     "ResNet-18",
                     ExecuTorchImageClassificationAdapter.ID,
                     "ExecuTorch",
-                    "resnet-18-int8-executorch.pte",
+                    "resnet-18_raspberry_executorch_optimized.pte",
                     ExecuTorchImageClassificationAdapter.PROFILE_IMAGENET_CROP_256
             ),
             new ModelDescriptor(
@@ -91,7 +91,7 @@ final class ModelRegistry {
                     "ResNet-50",
                     ExecuTorchImageClassificationAdapter.ID,
                     "ExecuTorch",
-                    "resnet-50-int8-executorch.pte",
+                    "resnet-50_raspberry_executorch_optimized.pte",
                     ExecuTorchImageClassificationAdapter.PROFILE_IMAGENET_CROP_256
             ),
             new ModelDescriptor(
@@ -99,7 +99,7 @@ final class ModelRegistry {
                     "ShuffleNet V2 x1.0",
                     ExecuTorchImageClassificationAdapter.ID,
                     "ExecuTorch",
-                    "shufflenet-v2-x1-0-int8-executorch.pte",
+                    "shufflenet_v2_x1_0_raspberry_executorch_optimized.pte",
                     ExecuTorchImageClassificationAdapter.PROFILE_IMAGENET_CROP_256
             ),
             new ModelDescriptor(
@@ -107,7 +107,7 @@ final class ModelRegistry {
                     "SqueezeNet 1.1",
                     ExecuTorchImageClassificationAdapter.ID,
                     "ExecuTorch",
-                    "squeezenet-1-1-int8-executorch.pte",
+                    "squeezenet_1_1_raspberry_executorch_optimized.pte",
                     ExecuTorchImageClassificationAdapter.PROFILE_IMAGENET_CROP_256
             ),
             new ModelDescriptor(
@@ -115,7 +115,7 @@ final class ModelRegistry {
                     "Swin Tiny",
                     ExecuTorchImageClassificationAdapter.ID,
                     "ExecuTorch",
-                    "swin-tiny-int8-executorch.pte",
+                    "swin_tiny_dynamic_raspberry_executorch_optimized.pte",
                     ExecuTorchImageClassificationAdapter.PROFILE_IMAGENET_CROP_232
             ),
             new ModelDescriptor(
@@ -123,7 +123,7 @@ final class ModelRegistry {
                     "ViT Base",
                     ExecuTorchImageClassificationAdapter.ID,
                     "ExecuTorch",
-                    "vit-base-int8-executorch.pte",
+                    "google__vit-base-patch16-224_raspberry_executorch_optimized.pte",
                     ExecuTorchImageClassificationAdapter.PROFILE_SYMMETRIC_DIRECT_RESIZE
             ),
             new ModelDescriptor(
