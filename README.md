@@ -10,6 +10,8 @@ This Android application runs Arm-optimized image models locally on an Arm64 pho
 
 The application imports model binaries at run time, so the model files are not stored in the Android application package (APK).
 
+Model inference and result formatting happen on the device. The application declares no network permissions and does not upload selected photos, entered descriptions, or results.
+
 ## Application views
 
 <p align="center">
@@ -25,8 +27,9 @@ The application supports fixed-label classification with LiteRT or ExecuTorch, a
 
 - Android Studio with Android SDK 35
 - Java 17, supplied by Android Studio
-- An Arm64 Android device running Android 9, API 28, or later
-- One supported or registered model file downloaded from the Arm AI Portal
+- An Arm64 Android device or emulator running Android 9 (API level 28) or later
+- One supported model file from the Arm AI Portal, or another compatible model registered in the source code
+- Enough free device storage for the imported model; each model file must be 700 MB or smaller
 
 ## Supported launch models
 
@@ -95,7 +98,7 @@ $MODEL_FILE = python download_model.py `
 Write-Output "Model file: $MODEL_FILE"
 ```
 
-For a supported model, the script downloads the registered `.tflite` or `.pte` file. MobileNetV3 Small ExecuTorch and CLIP both publish a file named `optimized.pte`, so the script gives those two files unique names when it downloads them. For another repository, it downloads the package and selects its only `.tflite` or `.pte` file. Use `--filename` if the repository contains more than one model file.
+For a supported model, the script downloads the registered `.tflite` or `.pte` file. MobileNetV3 Small ExecuTorch and CLIP both publish a file named `optimized.pte`, so the script gives those two files unique names when it downloads them. For an unlisted repository, the script downloads the package and selects the only `.tflite` or `.pte` file. Use `--filename` if the repository contains more than one model file.
 
 Copy the downloaded model to the Android **Downloads** directory through ADB:
 
@@ -110,18 +113,18 @@ adb push "$MODEL_FILE" /sdcard/Download/
 3. Wait for Gradle sync to finish.
 4. Connect an Arm64 Android phone or start an Arm64 emulator.
 5. Select the `app` configuration and run it.
-6. Select **Add or change model** and choose the matching optimized file.
-7. Select **Choose a photo**, then run **LiteRT Quick Identify**, **ExecuTorch Quick Identify**, or **ExecuTorch CLIP Custom Match**.
+6. Select the mode that matches the downloaded model, select **Add or change model**, and choose the optimized file.
+7. Select **Choose a photo**, then choose an image. Select **Identify photo** for either Quick Identify mode or **Compare possibilities** for ExecuTorch CLIP Custom Match.
 
 The application does not include a sample photo. Each user selects the image they want to analyze from the Android document picker.
 
-The application stores the selected model in its private files directory. Clearing application data or uninstalling the application removes imported models.
+The application stores each imported model in its private files directory. Clearing application data or uninstalling the application removes these app-private copies. Android backup or device-transfer services may later restore eligible private files because Android backup is enabled.
 
 ## Register another compatible model
 
 A model that matches an existing adapter's task, tensor contract, labels, and preprocessing can use that adapter after you add one `ModelDescriptor` to `CompatibleModelRegistry.java`.
 
-Each descriptor records the filename, adapter, and preprocessing configuration together. For example, a LiteRT ImageNet classifier that uses the same preprocessing as MobileNetV3 Small can be registered with:
+Each descriptor records the filename, adapter, and preprocessing configuration together. For example, a LiteRT ImageNet classifier that uses the same preprocessing as MobileNetV3 Small can be registered as follows:
 
 ```java
 new ModelDescriptor(
@@ -136,13 +139,13 @@ new ModelDescriptor(
 
 Add the descriptor to the list returned by `CompatibleModelRegistry.models()`, rebuild the APK, and import the model using its unchanged filename. This route reuses an existing adapter. It is appropriate only when the model package matches that adapter's complete input, output, label, and preprocessing contract.
 
-If the model has the same task and tensor contract but needs different resizing, cropping, normalization, or input dimensions, add a preprocessing profile to the existing classifier and adapter. Reference the new profile from the descriptor. Create a separate adapter only when the model changes the inputs, outputs, callable methods, runtime, result decoding, or application controls.
+If a model can otherwise use an existing adapter but needs different resizing, cropping, normalization, or input dimensions, add a preprocessing profile to the existing classifier and adapter. Reference the new profile from the descriptor. Create a separate adapter only when the model requires changes beyond preprocessing, such as different inputs, outputs, callable methods, runtime, result decoding, or application controls.
 
 ## Extend the application
 
 The application discovers modes through `AdapterRegistry.java`. The supplied adapters support LiteRT classification, ExecuTorch classification, and ExecuTorch CLIP matching. `GeneratedAdapterRegistry.java` is intentionally empty and provides a build-time extension point for a model package that does not fit those adapters.
 
-As an optional extra, the `adapter-generation/` directory contains scripts and a coding-agent prompt for inspecting a complete model package and preparing another adapter. The current importer accepts one model binary for each registered model. Packages that need multiple model binaries need changes to the importer and adapter contracts. Generated Java code, layouts, resources, and runtime dependencies must be compiled into a new APK and tested on an Arm64 Android device.
+Optionally, use the scripts and coding-agent prompt in the `adapter-generation/` directory to inspect a complete model package and prepare another adapter. The current importer accepts one model binary for each registered model. Packages that require multiple model binaries at run time require changes to the importer and adapter contracts. Generated Java code, layouts, resources, and runtime dependencies must be compiled into a new APK and tested on an Arm64 Android device.
 
 ## License
 
