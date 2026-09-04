@@ -38,13 +38,11 @@ The model registry uses the filename to select one of the three supplied adapter
 | Model | Runtime | Import this file |
 | --- | --- | --- |
 | [DEiT Tiny LiteRT](https://huggingface.co/Arm/deit-tiny-int8-litert) | LiteRT | `facebook__deit-tiny-patch16-224_litert_optimized.tflite` |
-| [Google ViT LiteRT](https://huggingface.co/Arm/vit-base-int8-litert) | LiteRT | `google__vit-base-patch16-224_android_litert_optimized.tflite` |
 | [MobileNetV3 Small LiteRT](https://huggingface.co/Arm/mobilenet-v3-small-int8-litert) | LiteRT | `mobilenet_v3_small_android_litert_optimized.tflite` |
 | [Swin Tiny LiteRT](https://huggingface.co/Arm/swin-tiny-int8-litert) | LiteRT | `microsoft__swin-tiny-patch4-window7-224_android_litert_optimized.tflite` |
 | [timm ViT LiteRT](https://huggingface.co/Arm/vit-base-timm-int8-litert) | LiteRT | `timm__vit_base_patch16_224.augreg_in21k_ft_in1k_android_litert_optimized.tflite` |
 | [DEiT Tiny ExecuTorch](https://huggingface.co/Arm/deit-tiny-int8-xnnpack-executorch) | ExecuTorch | `deit_raspberry_executorch_optimized.pte` |
 | [GoogLeNet ExecuTorch](https://huggingface.co/Arm/googlenet-int8-xnnpack-executorch-raspberrypi5) | ExecuTorch | `googlenet_raspberry_executorch_optimized.pte` |
-| [Inception V3 ExecuTorch](https://huggingface.co/Arm/inception-v3-int8-xnnpack-executorch-raspberrypi5) | ExecuTorch | `inception_v3_raspberry_executorch_optimized.pte` |
 | [MobileNetV3 Small ExecuTorch](https://huggingface.co/Arm/mobilenet-v3-small-int8-xnnpack-executorch) | ExecuTorch | `mobilenet-v3-small-int8-executorch.pte` |
 | [ResNet-18 ExecuTorch](https://huggingface.co/Arm/resnet-18-int8-xnnpack-executorch) | ExecuTorch | `resnet-18_raspberry_executorch_optimized.pte` |
 | [ResNet-50 ExecuTorch](https://huggingface.co/Arm/resnet-50-int8-xnnpack-executorch) | ExecuTorch | `resnet-50_raspberry_executorch_optimized.pte` |

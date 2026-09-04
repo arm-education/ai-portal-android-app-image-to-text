@@ -15,14 +15,6 @@ final class ModelRegistry {
                     LiteRtImageClassificationAdapter.PROFILE_IMAGENET_CROP_256
             ),
             new ModelDescriptor(
-                    "google-vit-litert",
-                    "Google ViT",
-                    LiteRtImageClassificationAdapter.ID,
-                    "LiteRT",
-                    "google__vit-base-patch16-224_android_litert_optimized.tflite",
-                    LiteRtImageClassificationAdapter.PROFILE_SYMMETRIC_DIRECT_RESIZE
-            ),
-            new ModelDescriptor(
                     "mobilenet-v3-small-litert",
                     "MobileNetV3 Small",
                     LiteRtImageClassificationAdapter.ID,
@@ -61,14 +53,6 @@ final class ModelRegistry {
                     "ExecuTorch",
                     "googlenet_raspberry_executorch_optimized.pte",
                     ExecuTorchImageClassificationAdapter.PROFILE_IMAGENET_CROP_256
-            ),
-            new ModelDescriptor(
-                    "inception-v3-executorch",
-                    "Inception V3",
-                    ExecuTorchImageClassificationAdapter.ID,
-                    "ExecuTorch",
-                    "inception_v3_raspberry_executorch_optimized.pte",
-                    ExecuTorchImageClassificationAdapter.PROFILE_IMAGENET_CROP_342
             ),
             new ModelDescriptor(
                     "mobilenet-v3-small-executorch",
