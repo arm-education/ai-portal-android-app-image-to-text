@@ -31,7 +31,7 @@ The application supports fixed-label classification with LiteRT or ExecuTorch, a
 - One supported model file from the Arm AI Portal, or another compatible model registered in the source code
 - Enough free device storage for the imported model; each model file must be 700 MB or smaller
 
-## Supported launch models
+## Supported models
 
 The model registry uses the filename to select one of the three supplied adapters. The adapter then validates the model and handles its controls, preprocessing, runtime calls, and result formatting.
 
