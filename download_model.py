@@ -8,16 +8,12 @@ from pathlib import Path
 
 VERIFIED_MODELS = {
     "Arm/deit-tiny-int8-litert": "facebook__deit-tiny-patch16-224_litert_optimized.tflite",
-    "Arm/vit-base-int8-litert": "google__vit-base-patch16-224_android_litert_optimized.tflite",
     "Arm/mobilenet-v3-small-int8-litert": "mobilenet_v3_small_android_litert_optimized.tflite",
     "Arm/swin-tiny-int8-litert": "microsoft__swin-tiny-patch4-window7-224_android_litert_optimized.tflite",
     "Arm/vit-base-timm-int8-litert": "timm__vit_base_patch16_224.augreg_in21k_ft_in1k_android_litert_optimized.tflite",
     "Arm/deit-tiny-int8-xnnpack-executorch": "deit_raspberry_executorch_optimized.pte",
     "Arm/googlenet-int8-xnnpack-executorch-raspberrypi5": (
         "googlenet_raspberry_executorch_optimized.pte"
-    ),
-    "Arm/inception-v3-int8-xnnpack-executorch-raspberrypi5": (
-        "inception_v3_raspberry_executorch_optimized.pte"
     ),
     "Arm/mobilenet-v3-small-int8-xnnpack-executorch": "optimized.pte",
     "Arm/resnet-18-int8-xnnpack-executorch": "resnet-18_raspberry_executorch_optimized.pte",
