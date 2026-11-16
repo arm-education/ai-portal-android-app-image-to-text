@@ -10,7 +10,6 @@ android {
         applicationId = "org.arm.learningpath.imageclassification"
         minSdk = 28
         targetSdk = 35
-        testInstrumentationRunner = "android.test.InstrumentationTestRunner"
         versionCode = 1
         versionName = "1.0"
 
@@ -29,13 +28,7 @@ android {
     }
 }
 
-// Framework test APIs are compile-only; the test APK requests their device libraries.
 dependencies {
-    androidTestCompileOnly(files(
-        "${android.sdkDirectory}/platforms/android-35/optional/android.test.runner.jar",
-        "${android.sdkDirectory}/platforms/android-35/optional/android.test.base.jar",
-        "${android.sdkDirectory}/platforms/android-35/optional/android.test.mock.jar"
-    ))
     implementation("com.google.ai.edge.litert:litert:2.1.6")
     implementation("org.pytorch:executorch-android:1.3.1")
 }
