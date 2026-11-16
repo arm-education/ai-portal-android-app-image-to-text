@@ -27,6 +27,14 @@ VERIFIED_MODELS = {
     "Arm/swin-tiny-int8-xnnpack-executorch": "swin_tiny_dynamic_raspberry_executorch_optimized.pte",
     "Arm/vit-base-int8-xnnpack-executorch": "google__vit-base-patch16-224_raspberry_executorch_optimized.pte",
     "Arm/clip-vit-base-patch32-int8-xnnpack-executorch": "optimized.pte",
+    "Arm/wideresnet50-int8-xnnpack-executorch-vivo-x300": "model.pte",
+    "Arm/inception-v3-int8-xnnpack-executorch-vivo-x300": "model.pte",
+    "Arm/efficientnet-b4-int8-xnnpack-executorch-vivo-x300": "model.pte",
+    "Arm/squeezenet-1-0-int8-xnnpack-executorch-vivo-x300": "model.pte",
+    "Arm/nota-deit-tiny-int8-xnnpack-executorch-vivo-x300": "model.pte",
+    "Arm/swin-t-int8-xnnpack-executorch-vivo-x300": "model.pte",
+    "Arm/vit-b-16-int8-xnnpack-executorch-vivo-x300": "model.pte",
+    "Arm/nota-googlenet-int8-xnnpack-executorch-vivo-x300": "model.pte",
 }
 
 IMPORT_FILENAMES = {
@@ -36,6 +44,14 @@ IMPORT_FILENAMES = {
     "Arm/clip-vit-base-patch32-int8-xnnpack-executorch": (
         "clip-vit-base-patch32-int8-executorch.pte"
     ),
+    "Arm/wideresnet50-int8-xnnpack-executorch-vivo-x300": "wideresnet50-int8-executorch-vivo-x300.pte",
+    "Arm/inception-v3-int8-xnnpack-executorch-vivo-x300": "inception-v3-int8-executorch-vivo-x300.pte",
+    "Arm/efficientnet-b4-int8-xnnpack-executorch-vivo-x300": "efficientnet-b4-int8-executorch-vivo-x300.pte",
+    "Arm/squeezenet-1-0-int8-xnnpack-executorch-vivo-x300": "squeezenet-1-0-int8-executorch-vivo-x300.pte",
+    "Arm/nota-deit-tiny-int8-xnnpack-executorch-vivo-x300": "nota-deit-tiny-int8-executorch-vivo-x300.pte",
+    "Arm/swin-t-int8-xnnpack-executorch-vivo-x300": "swin-t-int8-executorch-vivo-x300.pte",
+    "Arm/vit-b-16-int8-xnnpack-executorch-vivo-x300": "vit-b-16-int8-executorch-vivo-x300.pte",
+    "Arm/nota-googlenet-int8-xnnpack-executorch-vivo-x300": "nota-googlenet-int8-executorch-vivo-x300.pte",
 }
 
 
@@ -87,7 +103,8 @@ def main() -> None:
                 local_dir=destination,
             )
         )
-        if args.filename is None and args.repo_id in IMPORT_FILENAMES:
+        if (args.repo_id in IMPORT_FILENAMES
+                and filename == VERIFIED_MODELS.get(args.repo_id)):
             import_path = destination / IMPORT_FILENAMES[args.repo_id]
             shutil.copy2(downloaded_path, import_path)
             downloaded_path = import_path

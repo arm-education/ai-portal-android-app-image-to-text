@@ -149,7 +149,9 @@ final class ExecuTorchImageClassifier implements Closeable {
             double sourceY = (cropTop + y + 0.5) / scaleY - 0.5;
             for (int x = 0; x < imageSize; x++) {
                 double sourceX = (cropLeft + x + 0.5) / scaleX - 0.5;
-                int color = bicubicPixel(
+                int color = preprocessingProfile.bilinear
+                        ? bilinearPixel(sourcePixels, sourceWidth, sourceHeight, sourceX, sourceY)
+                        : bicubicPixel(
                         sourcePixels,
                         sourceWidth,
                         sourceHeight,
@@ -169,6 +171,29 @@ final class ExecuTorchImageClassifier implements Closeable {
         float unitValue = channelValue / 255.0f;
         return (unitValue - preprocessingProfile.mean[channel])
                 / preprocessingProfile.standardDeviation[channel];
+    }
+
+    private static int bilinearPixel(int[] pixels, int width, int height, double x, double y) {
+        int left = (int) Math.floor(x);
+        int top = (int) Math.floor(y);
+        double dx = x - left;
+        double dy = y - top;
+        int result = 0xff000000;
+        for (int channel = 0; channel < 3; channel++) {
+            int shift = (2 - channel) * 8;
+            double value = 0.0;
+            for (int row = 0; row < 2; row++) {
+                for (int column = 0; column < 2; column++) {
+                    int pixel = pixels[clamp(top + row, 0, height - 1) * width
+                            + clamp(left + column, 0, width - 1)];
+                    value += ((pixel >> shift) & 255)
+                            * (column == 0 ? 1.0 - dx : dx)
+                            * (row == 0 ? 1.0 - dy : dy);
+                }
+            }
+            result |= clamp((int) Math.round(value), 0, 255) << shift;
+        }
+        return result;
     }
 
     private static int bicubicPixel(int[] pixels, int width, int height, double x, double y) {
@@ -302,6 +327,16 @@ final class ExecuTorchImageClassifier implements Closeable {
     }
 
     enum PreprocessingProfile {
+        IMAGENET_BILINEAR_CROP_256(224, ResizeMode.SHORT_EDGE_CENTER_CROP, 256,
+                IMAGENET_MEAN, IMAGENET_STANDARD_DEVIATION, true),
+        SYMMETRIC_CROP_341(299, ResizeMode.SHORT_EDGE_CENTER_CROP, 341,
+                HALF_MEAN, HALF_STANDARD_DEVIATION),
+        IMAGENET_CROP_384(384, ResizeMode.SHORT_EDGE_CENTER_CROP, 384,
+                IMAGENET_MEAN, IMAGENET_STANDARD_DEVIATION),
+        SYMMETRIC_BILINEAR_DIRECT_RESIZE(224, ResizeMode.DIRECT, 0,
+                HALF_MEAN, HALF_STANDARD_DEVIATION, true),
+        IMAGENET_DIRECT_RESIZE(224, ResizeMode.DIRECT, 0,
+                IMAGENET_MEAN, IMAGENET_STANDARD_DEVIATION),
         IMAGENET_CROP_256(
                 224,
                 ResizeMode.SHORT_EDGE_CENTER_CROP,
@@ -331,6 +366,7 @@ final class ExecuTorchImageClassifier implements Closeable {
                 HALF_STANDARD_DEVIATION
         );
 
+        private final boolean bilinear;
         private final int imageSize;
         private final ResizeMode resizeMode;
         private final int shortEdge;
@@ -339,6 +375,12 @@ final class ExecuTorchImageClassifier implements Closeable {
 
         PreprocessingProfile(int imageSize, ResizeMode resizeMode, int shortEdge,
                              float[] mean, float[] standardDeviation) {
+            this(imageSize, resizeMode, shortEdge, mean, standardDeviation, false);
+        }
+
+        PreprocessingProfile(int imageSize, ResizeMode resizeMode, int shortEdge,
+                             float[] mean, float[] standardDeviation, boolean bilinear) {
+            this.bilinear = bilinear;
             this.imageSize = imageSize;
             this.resizeMode = resizeMode;
             this.shortEdge = shortEdge;

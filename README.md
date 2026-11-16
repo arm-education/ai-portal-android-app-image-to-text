@@ -42,14 +42,22 @@ The model registry uses the filename to select one of the three supplied adapter
 | [Swin Tiny LiteRT](https://huggingface.co/Arm/swin-tiny-int8-litert) | LiteRT | `microsoft__swin-tiny-patch4-window7-224_android_litert_optimized.tflite` |
 | [timm ViT LiteRT](https://huggingface.co/Arm/vit-base-timm-int8-litert) | LiteRT | `timm__vit_base_patch16_224.augreg_in21k_ft_in1k_android_litert_optimized.tflite` |
 | [DEiT Tiny ExecuTorch](https://huggingface.co/Arm/deit-tiny-int8-xnnpack-executorch) | ExecuTorch | `deit_raspberry_executorch_optimized.pte` |
+| [DeiT-Tiny (Nota) ExecuTorch](https://huggingface.co/Arm/nota-deit-tiny-int8-xnnpack-executorch-vivo-x300) | ExecuTorch | `nota-deit-tiny-int8-executorch-vivo-x300.pte` |
+| [EfficientNet-B4 ExecuTorch](https://huggingface.co/Arm/efficientnet-b4-int8-xnnpack-executorch-vivo-x300) | ExecuTorch | `efficientnet-b4-int8-executorch-vivo-x300.pte` |
 | [GoogLeNet ExecuTorch](https://huggingface.co/Arm/googlenet-int8-xnnpack-executorch-raspberrypi5) | ExecuTorch | `googlenet_raspberry_executorch_optimized.pte` |
+| [GoogLeNet (Nota) ExecuTorch](https://huggingface.co/Arm/nota-googlenet-int8-xnnpack-executorch-vivo-x300) | ExecuTorch | `nota-googlenet-int8-executorch-vivo-x300.pte` |
+| [Inception V3 ExecuTorch](https://huggingface.co/Arm/inception-v3-int8-xnnpack-executorch-vivo-x300) | ExecuTorch | `inception-v3-int8-executorch-vivo-x300.pte` |
 | [MobileNetV3 Small ExecuTorch](https://huggingface.co/Arm/mobilenet-v3-small-int8-xnnpack-executorch) | ExecuTorch | `mobilenet-v3-small-int8-executorch.pte` |
 | [ResNet-18 ExecuTorch](https://huggingface.co/Arm/resnet-18-int8-xnnpack-executorch) | ExecuTorch | `resnet-18_raspberry_executorch_optimized.pte` |
 | [ResNet-50 ExecuTorch](https://huggingface.co/Arm/resnet-50-int8-xnnpack-executorch) | ExecuTorch | `resnet-50_raspberry_executorch_optimized.pte` |
 | [ShuffleNet V2 x1.0 ExecuTorch](https://huggingface.co/Arm/shufflenet-v2-x1-0-int8-xnnpack-executorch) | ExecuTorch | `shufflenet_v2_x1_0_raspberry_executorch_optimized.pte` |
+| [SqueezeNet 1.0 ExecuTorch](https://huggingface.co/Arm/squeezenet-1-0-int8-xnnpack-executorch-vivo-x300) | ExecuTorch | `squeezenet-1-0-int8-executorch-vivo-x300.pte` |
 | [SqueezeNet 1.1 ExecuTorch](https://huggingface.co/Arm/squeezenet-1-1-int8-xnnpack-executorch) | ExecuTorch | `squeezenet_1_1_raspberry_executorch_optimized.pte` |
 | [Swin Tiny ExecuTorch](https://huggingface.co/Arm/swin-tiny-int8-xnnpack-executorch) | ExecuTorch | `swin_tiny_dynamic_raspberry_executorch_optimized.pte` |
+| [Swin-T ExecuTorch](https://huggingface.co/Arm/swin-t-int8-xnnpack-executorch-vivo-x300) | ExecuTorch | `swin-t-int8-executorch-vivo-x300.pte` |
 | [ViT Base ExecuTorch](https://huggingface.co/Arm/vit-base-int8-xnnpack-executorch) | ExecuTorch | `google__vit-base-patch16-224_raspberry_executorch_optimized.pte` |
+| [ViT-B/16 ExecuTorch](https://huggingface.co/Arm/vit-b-16-int8-xnnpack-executorch-vivo-x300) | ExecuTorch | `vit-b-16-int8-executorch-vivo-x300.pte` |
+| [Wide ResNet-50 ExecuTorch](https://huggingface.co/Arm/wideresnet50-int8-xnnpack-executorch-vivo-x300) | ExecuTorch | `wideresnet50-int8-executorch-vivo-x300.pte` |
 | [CLIP ViT-B/32 ExecuTorch](https://huggingface.co/Arm/clip-vit-base-patch32-int8-xnnpack-executorch) | ExecuTorch | `clip-vit-base-patch32-int8-executorch.pte` |
 
 ## Download a model
@@ -96,7 +104,9 @@ $MODEL_FILE = python download_model.py `
 Write-Output "Model file: $MODEL_FILE"
 ```
 
-For a supported model, the script downloads the registered `.tflite` or `.pte` file. MobileNetV3 Small ExecuTorch and CLIP both publish a file named `optimized.pte`, so the script gives those two files unique names when it downloads them. For an unlisted repository, the script downloads the package and selects the only `.tflite` or `.pte` file. Use `--filename` if the repository contains more than one model file.
+For a supported model, the script downloads the registered `.tflite` or `.pte` file. Some packages publish the same filename, such as `optimized.pte` or `model.pte`, so the script gives those files unique import names as listed in the table. Keep the downloader-produced filename unchanged when copying and importing it.
+
+For an unlisted repository, the script downloads the package and selects the only `.tflite` or `.pte` file. Use `--filename` if the repository contains more than one model file.
 
 Copy the downloaded model to the Android **Downloads** directory through ADB:
 
@@ -121,6 +131,8 @@ The application stores each imported model in its private files directory. Clear
 ## Register another compatible model
 
 A model that matches an existing adapter's task, tensor contract, labels, and preprocessing can use that adapter after you add one `ModelDescriptor` to `CompatibleModelRegistry.java`.
+
+The ExecuTorch classification adapter accepts float32 RGB input in `NCHW` layout and returns `[1, 1000]` float32 logits. Its registered profiles use `224 × 224`, `299 × 299` (Inception V3), or `384 × 384` (EfficientNet-B4) inputs. Each profile specifies interpolation, cropping, and normalization as well as input size.
 
 Each descriptor records the filename, adapter, and preprocessing configuration together. For example, a LiteRT ImageNet classifier that uses the same preprocessing as MobileNetV3 Small can be registered as follows:
 

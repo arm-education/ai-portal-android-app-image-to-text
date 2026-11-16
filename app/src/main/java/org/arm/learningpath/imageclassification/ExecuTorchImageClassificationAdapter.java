@@ -15,6 +15,13 @@ final class ExecuTorchImageClassificationAdapter implements VisionAdapter {
     static final String PROFILE_IMAGENET_CROP_232 = "imagenet-crop-232";
     static final String PROFILE_SYMMETRIC_DIRECT_RESIZE = "symmetric-direct-resize";
 
+    static final String PROFILE_IMAGENET_BILINEAR_CROP_256 = "imagenet-bilinear-crop-256";
+    static final String PROFILE_IMAGENET_CROP_384 = "imagenet-crop-384";
+    static final String PROFILE_IMAGENET_DIRECT_RESIZE = "imagenet-direct-resize";
+    static final String PROFILE_SYMMETRIC_CROP_341 = "symmetric-crop-341";
+
+    static final String PROFILE_SYMMETRIC_BILINEAR_DIRECT_RESIZE = "symmetric-bilinear-direct-resize";
+
     private static final AdapterDefinition DEFINITION = new AdapterDefinition(
             ID,
             R.string.executorch_classification_mode_title,
@@ -76,6 +83,16 @@ final class ExecuTorchImageClassificationAdapter implements VisionAdapter {
     private static ExecuTorchImageClassifier.PreprocessingProfile preprocessingProfile(
             ModelDescriptor descriptor) {
         return switch (descriptor.configurationId()) {
+            case PROFILE_SYMMETRIC_BILINEAR_DIRECT_RESIZE ->
+                    ExecuTorchImageClassifier.PreprocessingProfile.SYMMETRIC_BILINEAR_DIRECT_RESIZE;
+            case PROFILE_IMAGENET_BILINEAR_CROP_256 ->
+                    ExecuTorchImageClassifier.PreprocessingProfile.IMAGENET_BILINEAR_CROP_256;
+            case PROFILE_IMAGENET_CROP_384 ->
+                    ExecuTorchImageClassifier.PreprocessingProfile.IMAGENET_CROP_384;
+            case PROFILE_IMAGENET_DIRECT_RESIZE ->
+                    ExecuTorchImageClassifier.PreprocessingProfile.IMAGENET_DIRECT_RESIZE;
+            case PROFILE_SYMMETRIC_CROP_341 ->
+                    ExecuTorchImageClassifier.PreprocessingProfile.SYMMETRIC_CROP_341;
             case PROFILE_IMAGENET_CROP_342 ->
                     ExecuTorchImageClassifier.PreprocessingProfile.IMAGENET_CROP_342;
             case PROFILE_IMAGENET_CROP_232 ->

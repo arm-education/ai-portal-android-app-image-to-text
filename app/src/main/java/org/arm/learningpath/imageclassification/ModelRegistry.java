@@ -111,6 +111,70 @@ final class ModelRegistry {
                     ExecuTorchImageClassificationAdapter.PROFILE_SYMMETRIC_DIRECT_RESIZE
             ),
             new ModelDescriptor(
+                    "wideresnet50-vivo-executorch",
+                    "Wide ResNet-50",
+                    ExecuTorchImageClassificationAdapter.ID,
+                    "ExecuTorch",
+                    "wideresnet50-int8-executorch-vivo-x300.pte",
+                    ExecuTorchImageClassificationAdapter.PROFILE_IMAGENET_BILINEAR_CROP_256
+            ),
+            new ModelDescriptor(
+                    "inception-v3-vivo-executorch",
+                    "Inception V3",
+                    ExecuTorchImageClassificationAdapter.ID,
+                    "ExecuTorch",
+                    "inception-v3-int8-executorch-vivo-x300.pte",
+                    ExecuTorchImageClassificationAdapter.PROFILE_SYMMETRIC_CROP_341
+            ),
+            new ModelDescriptor(
+                    "efficientnet-b4-vivo-executorch",
+                    "EfficientNet-B4",
+                    ExecuTorchImageClassificationAdapter.ID,
+                    "ExecuTorch",
+                    "efficientnet-b4-int8-executorch-vivo-x300.pte",
+                    ExecuTorchImageClassificationAdapter.PROFILE_IMAGENET_CROP_384
+            ),
+            new ModelDescriptor(
+                    "squeezenet-1-0-vivo-executorch",
+                    "SqueezeNet 1.0",
+                    ExecuTorchImageClassificationAdapter.ID,
+                    "ExecuTorch",
+                    "squeezenet-1-0-int8-executorch-vivo-x300.pte",
+                    ExecuTorchImageClassificationAdapter.PROFILE_IMAGENET_BILINEAR_CROP_256
+            ),
+            new ModelDescriptor(
+                    "nota-deit-tiny-vivo-executorch",
+                    "DeiT-Tiny (Nota)",
+                    ExecuTorchImageClassificationAdapter.ID,
+                    "ExecuTorch",
+                    "nota-deit-tiny-int8-executorch-vivo-x300.pte",
+                    ExecuTorchImageClassificationAdapter.PROFILE_SYMMETRIC_BILINEAR_DIRECT_RESIZE
+            ),
+            new ModelDescriptor(
+                    "swin-t-vivo-executorch",
+                    "Swin-T",
+                    ExecuTorchImageClassificationAdapter.ID,
+                    "ExecuTorch",
+                    "swin-t-int8-executorch-vivo-x300.pte",
+                    ExecuTorchImageClassificationAdapter.PROFILE_IMAGENET_DIRECT_RESIZE
+            ),
+            new ModelDescriptor(
+                    "vit-b-16-vivo-executorch",
+                    "ViT-B/16",
+                    ExecuTorchImageClassificationAdapter.ID,
+                    "ExecuTorch",
+                    "vit-b-16-int8-executorch-vivo-x300.pte",
+                    ExecuTorchImageClassificationAdapter.PROFILE_IMAGENET_BILINEAR_CROP_256
+            ),
+            new ModelDescriptor(
+                    "nota-googlenet-vivo-executorch",
+                    "GoogLeNet (Nota)",
+                    ExecuTorchImageClassificationAdapter.ID,
+                    "ExecuTorch",
+                    "nota-googlenet-int8-executorch-vivo-x300.pte",
+                    ExecuTorchImageClassificationAdapter.PROFILE_IMAGENET_BILINEAR_CROP_256
+            ),
+            new ModelDescriptor(
                     "clip-vit-b32-executorch",
                     "CLIP ViT-B/32 INT8",
                     ExecuTorchClipAdapter.ID,
